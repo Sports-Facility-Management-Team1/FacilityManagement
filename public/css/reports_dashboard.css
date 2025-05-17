@@ -30,12 +30,42 @@ body {
   gap: 40px;
 }
 
+<<<<<<< HEAD
 button {
   background-color: #0a71d1;
   color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
+=======
+.upper-graphs .active-users
+{
+  display: flex;
+  flex-direction: column;
+  background: #f6f2f2;
+  color: #fff;
+  padding: 1px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  width: 220px;
+  height: 110%;
+}
+.counts-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center; /* Optional: vertically centers items */
+    width: 100%;
+    margin-top: 10px;
+    font-size: 10px;
+    font-family: Arial, sans-serif; /* Specify a fallback font */
+    font-weight: bold;
+    padding: 0; /* Reset padding if needed */
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.count-item {
+  color: blue;
+>>>>>>> 23b7c4be260208b0f4d213a869ebb576ff5d313c
   font-size: 14px;
   cursor: pointer;
   margin-bottom: 20px;

@@ -15,24 +15,9 @@ import issuesRoutes from './routes/issues.js';
 dotenv.config();
 
 console.log('Server is starting');
-
-
-const serviceAccountPath = path.resolve('../serviceAccountKey.json');
-//const serviceAccountPath = path.resolve('./serviceAccountKey.json');
-
-
-
-if (!fs.existsSync(serviceAccountPath)) {
-  console.error(`serviceAccountKey.json not found at ${serviceAccountPath}`);
-  process.exit(1);
-}
-
-
-//const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
-//const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-
-
+// const serviceAccountPath = path.resolve('../serviceAccountKey.json');
 // const serviceAccountPath = path.resolve('./serviceAccountKey.json');
+
 
 
 // if (!fs.existsSync(serviceAccountPath)) {
@@ -40,7 +25,8 @@ if (!fs.existsSync(serviceAccountPath)) {
 //   process.exit(1);
 // }
 
-//const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
+
+// const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 
@@ -61,12 +47,16 @@ const __dirname = path.dirname(__filename);
 const corsOptions = {
   origin: [
     'http://127.0.0.1:5500',
-    'http://127.0.0.1:5501'
+    'http://127.0.0.1:5501',
+    'http://localhost:3000'
   ],
   optionsSuccessStatus: 200,
+  credentials: true
 };
 
-app.use(cors());
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight
+
 
 app.use(express.static(path.join(__dirname, 'public'))); 
 
@@ -113,10 +103,13 @@ process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection:', reason);
 });
 
-const PORT = process.env.PORT || 3000||5173;
-
+const PORT = process.env.PORT||3000;
+// if (!process.env.PORT) {
+//   console.error('PORT environment variable not set!');
+//   process.exit(1);
+// }
 app.listen(PORT, () => {
-  console.log(` Server running on port: ${PORT}`);
+  console.log(` Server running on port: ${PORT} :http://localhost:3000`);
 });
 
   

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const monthSelect = document.getElementById("monthSelect");  
 
-  const chart = new ApexCharts(document.querySelector("#bookingsChart"), {
+  const chart = new ApexCharts(document.querySelector(".facility-bargraph"), {
   //const options = {
     chart: {
       height: 300,

@@ -287,6 +287,67 @@ const createUserRoutes = (db, admin) => {
     }
   });
 
+  router.get("/api/activeUsers",async (req,res) => {
+    
+    try {
+      const getIssues=await db.collection("Issues").get();
+      const issues=getIssues.docs.map(doc =>({
+        bookId:doc.id,
+        ...doc.data()
+      }))
+
+      const usersSnapshot = await db.collection("users").get();
+      const totalUsers = usersSnapshot.docs.length; 
+
+      const now = new Date();
+
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const lastWeekStart = new Date(today);
+      lastWeekStart.setDate(today.getDate() - 7 - today.getDay() + 1);
+
+      const lastWeekEnd = new Date(lastWeekStart);
+      lastWeekEnd.setDate(lastWeekStart.getDate() + 6);
+
+      const lastMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1); // 1st of last month
+      const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0); // Last day of last month
+
+
+      // Convert Firestore timestamp and filter
+      const lastWeekIssues = issues.filter(issue => {
+        const createdAt = issue.createdAt?.seconds 
+          ? new Date(issue.createdAt.seconds * 1000) 
+          : new Date(issue.createdAt._seconds * 1000);
+        
+        return createdAt >= lastWeekStart && createdAt <= lastWeekEnd;
+      });
+
+      const lastMonthIssues = issues.filter(issue => {
+        const createdAt = issue.createdAt?.seconds 
+          ? new Date(issue.createdAt.seconds * 1000) 
+          : new Date(issue.createdAt._seconds * 1000);
+        
+        return createdAt >= lastMonthStart && createdAt <= lastMonthEnd;
+      });
+
+      // lastWeekIssues.forEach(issue=>{
+      //   let currentIssue=issue.submittedBy;
+      //   lastWeekEnd.forEach(i=>{
+      //     if(currentIssue=issue);
+      //   })
+      // })
+
+      res.status(200).send({
+              lastWeek: lastWeekIssues.length,
+              lastMonth: lastMonthIssues.length,
+              totalUsers:totalUsers
+          });
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Server error");
+    }
+  });
+
     return router;
 };
 
